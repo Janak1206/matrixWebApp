@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
 // Import your logo image here if you have one, e.g.:
 import InstituteLogo from "../assets/matrix_logo.jpg";
+import env from '../env';
 
 
 // --- Type Definitions ---
@@ -84,7 +85,7 @@ const RegistrationForm: React.FC = () => {
     }
 
     try {
-      const response = await fetch('/api/register', {
+      const response = await fetch(`${env.API_BASE_URL}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
