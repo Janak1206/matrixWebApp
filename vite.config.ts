@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     proxy: {
       // This line is key
-      '/api': 'http://localhost:5000',
+      '/api': 'https://matrixwebservice.onrender.com',
     },
   },
 })
