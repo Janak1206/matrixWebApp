@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
-// Import your logo image here if you have one, e.g.:
 import InstituteLogo from "../assets/matrix_logo.jpg";
 
-// --- Type Definitions ---
 interface FormData {
   studentName: string;
   address: string;
@@ -15,7 +13,7 @@ interface FormData {
   standardOtherDetails: string;
   board: string;
   boardOtherDetails: string;
-  programDetails: string[]; // Array of selected program options
+  programDetails: string[];
 }
 
 const programOptions = {
@@ -30,11 +28,9 @@ const INITIAL_FORM_DATA: FormData = {
   programDetails: [],
 };
 
-// --- Static Header Component ---
 const InstituteHeader: React.FC = () => (
   <div className="institute-header">
     <div className="logo-container">
-      {/* Replace with your logo source */}
       <img src={InstituteLogo} alt="Institute Logo" className="institute-logo" />
     </div>
     <div className="details-container">
@@ -45,14 +41,18 @@ const InstituteHeader: React.FC = () => (
   </div>
 );
 
-// --- Main Component Definition ---
-
 const RegistrationForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
   const [message, setMessage] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  // ... (handleChange and handleProgramChange functions remain the same) ...
+  // 🌍 Auto-detect environment
+  const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL ||
+    (window.location.hostname === 'localhost'
+      ? 'http://localhost:5000/api'
+      : 'https://matrixwebservice.onrender.com/api');
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -61,12 +61,10 @@ const RegistrationForm: React.FC = () => {
   const handleProgramChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     setFormData(prev => {
-      const currentPrograms = prev.programDetails;
-      if (checked) {
-        return { ...prev, programDetails: [...currentPrograms, value] };
-      } else {
-        return { ...prev, programDetails: currentPrograms.filter(p => p !== value) };
-      }
+      const programs = checked
+        ? [...prev.programDetails, value]
+        : prev.programDetails.filter(p => p !== value);
+      return { ...prev, programDetails: programs };
     });
   };
 
@@ -75,30 +73,35 @@ const RegistrationForm: React.FC = () => {
     setIsSubmitting(true);
     setMessage('Submitting registration...');
 
-    // 🚀 CRITICAL CHANGE: Program Details Compulsory Check
     if (formData.programDetails.length === 0) {
-      setMessage('❌ Submission Error: Please select at least one program detail.');
+      setMessage('❌ Please select at least one program detail.');
       setIsSubmitting(false);
       return;
     }
 
     try {
-      const response = await fetch("/api/register", {
+      const response = await fetch(`${API_BASE_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      const data: { id?: number; message?: string } = await response.json();
+      // Handle possibly empty or non-JSON responses
+      let data: any = {};
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
 
       if (response.ok) {
-        setMessage(`✅ Registration Successful! ID: ${data.id}. Form cleared.`);
+        setMessage(`✅ Registration Successful! ID: ${data.id || '-'} Form cleared.`);
         setFormData(INITIAL_FORM_DATA);
       } else {
-        setMessage(`❌ Submission Error: ${data.message || 'Check network connection.'}`);
+        setMessage(`❌ ${data.message || 'Server error. Please try again.'}`);
       }
     } catch (error) {
-      console.error("Network or Fetch Error:", error);
+      console.error('Network or Fetch Error:', error);
       setMessage('❌ Network Error: Could not connect to the server.');
     } finally {
       setIsSubmitting(false);
@@ -107,43 +110,44 @@ const RegistrationForm: React.FC = () => {
 
   return (
     <div className="form-container">
-      {/* 👈 Institute Header goes here */}
       <InstituteHeader />
-
       <h1>Student Registration Form</h1>
       <form onSubmit={handleSubmit}>
-
         {/* --- PERSONAL DETAILS --- */}
         <fieldset className="form-section">
           <legend>Personal Details</legend>
-          {/* ... (input fields remain the same) ... */}
           <div className="input-group">
             <label htmlFor="studentName">Student Name:</label>
             <input type="text" id="studentName" name="studentName" value={formData.studentName} onChange={handleChange} required />
           </div>
+
           <div className="input-group">
             <label htmlFor="address">Address:</label>
             <textarea id="address" name="address" value={formData.address} onChange={handleChange} required rows={3} />
           </div>
+
           <div className="input-group">
             <label htmlFor="email">Email:</label>
-            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+            <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} required />
           </div>
+
           <div className="input-row">
             <div className="input-group">
               <label htmlFor="mobile">Mobile:</label>
-              <input type="tel" id="mobile" name="mobile" value={formData.mobile} onChange={handleChange} pattern="[0-9]{10,15}" required />
+              <input id="mobile" name="mobile" type="tel" value={formData.mobile} onChange={handleChange} pattern="[0-9]{10,15}" required />
             </div>
             <div className="input-group">
               <label htmlFor="dob">Date of Birth:</label>
-              <input type="date" id="dob" name="dob" value={formData.dob} onChange={handleChange} required />
+              <input id="dob" name="dob" type="date" value={formData.dob} onChange={handleChange} required />
             </div>
           </div>
+
           <div className="input-group">
             <label htmlFor="school">School:</label>
             <input type="text" id="school" name="school" value={formData.school} onChange={handleChange} required />
           </div>
-          {/* --- CONDITIONAL FIELDS: STANDARD & BOARD --- */}
+
+          {/* --- STANDARD --- */}
           <div className="input-row">
             <div className="input-group">
               <label htmlFor="standard">Standard:</label>
@@ -156,10 +160,12 @@ const RegistrationForm: React.FC = () => {
             {formData.standard === 'Other' && (
               <div className="input-group conditional-input">
                 <label htmlFor="standardOtherDetails">Standard Details:</label>
-                <input type="text" id="standardOtherDetails" name="standardOtherDetails" value={formData.standardOtherDetails} onChange={handleChange} required={formData.standard === 'Other'} />
+                <input id="standardOtherDetails" name="standardOtherDetails" value={formData.standardOtherDetails} onChange={handleChange} required />
               </div>
             )}
           </div>
+
+          {/* --- BOARD --- */}
           <div className="input-row">
             <div className="input-group">
               <label htmlFor="board">Board:</label>
@@ -173,16 +179,15 @@ const RegistrationForm: React.FC = () => {
             {formData.board === 'Other' && (
               <div className="input-group conditional-input">
                 <label htmlFor="boardOtherDetails">Board Details:</label>
-                <input type="text" id="boardOtherDetails" name="boardOtherDetails" value={formData.boardOtherDetails} onChange={handleChange} required={formData.board === 'Other'} />
+                <input id="boardOtherDetails" name="boardOtherDetails" value={formData.boardOtherDetails} onChange={handleChange} required />
               </div>
             )}
           </div>
         </fieldset>
 
-        {/* --- PROGRAM DETAILS (Multi-Choice) --- */}
+        {/* --- PROGRAM DETAILS --- */}
         <fieldset className="form-section">
-          <legend>Program Details </legend>  {/* <span style={{ color: 'red' }}>(Compulsory)</span> */}
-          {/* ... (checkbox grid remains the same) ... */}
+          <legend>Program Details <span style={{ color: 'red' }}>(Compulsory)</span></legend>
           <div className="program-details-grid">
             {Object.entries(programOptions).map(([category, options]) => (
               <div key={category} className="category-group">
@@ -216,6 +221,6 @@ const RegistrationForm: React.FC = () => {
       {message && <p className={`message ${message.startsWith('❌') ? 'error' : 'success'}`}>{message}</p>}
     </div>
   );
-}
+};
 
 export default RegistrationForm;
