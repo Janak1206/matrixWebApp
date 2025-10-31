@@ -1,0 +1,335 @@
+/* ======================================= */
+/* 1. Base Styles and Form Container */
+/* ======================================= */
+
+/* Define your theme color */
+:root {
+  --primary-orange: #FF8C00;
+  /* A vibrant orange, adjust as needed */
+  --text-dark: #333;
+  --text-medium: #555;
+  --text-light: #666;
+  --border-light: #ddd;
+}
+
+
+body {
+  font-family: Palatino, serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.form-container {
+  max-width: 800px;
+  width: 95%;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure the main form title stays prominent */
+.form-container h1 {
+  text-align: center;
+  color: var(--text-dark);
+  margin-top: 0;
+  /* Remove top margin as header is above */
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-light);
+}
+
+
+/* ======================================= */
+/* 2. Institute Header Styling */
+/* ======================================= */
+.institute-header {
+  /* DEFAULT (Mobile View) - Stack Vertically */
+  display: flex;
+  flex-direction: column;
+  /* 👈 Key Change: Stack items vertically */
+  align-items: center;
+  /* Center everything horizontally */
+  text-align: center;
+  /* Center the text lines */
+
+  padding: 15px 0;
+  border-bottom: 3px solid var(--primary-orange);
+}
+
+.logo-container {
+  padding-right: 0;
+  /* Remove right padding */
+  padding-bottom: 10px;
+  /* Add space below logo */
+  border-right: none;
+  /* Remove vertical separator on mobile */
+  border-bottom: 1px solid var(--border-light);
+  /* Add horizontal separator */
+  width: 100%;
+  /* Ensure separator spans full width */
+}
+
+.details-container {
+  padding-left: 0;
+  /* Remove left padding */
+  padding-top: 0px;
+  /* Add space above details */
+}
+
+
+.details-container h2 {
+  margin: 0 0 3px 0;
+  /* 👈 KEY CHANGE: Set small bottom margin */
+  color: var(--primary-orange);
+  font-size: 1.6rem;
+}
+
+.details-container p {
+  /* Remove default paragraph margins */
+  margin: 0;
+  /* 👈 KEY CHANGE: Set margin to zero */
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.3;
+  /* Optional: Slightly tighten line height for address lines */
+}
+
+.institute-logo {
+  width: 120px;
+  height: auto;
+}
+
+
+/* ======================================= */
+/* 3. Form Sections and Inputs */
+/* ======================================= */
+
+.form-section {
+  border: 1px solid var(--border-light);
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 25px;
+}
+
+.form-section legend {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary-orange);
+  /* 👈 Orange for Fieldset Legend */
+  padding: 0 10px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: var(--text-medium);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.conditional-input {
+  margin-top: 5px;
+}
+
+/* ======================================= */
+/* 4. Program Details (Checkboxes) */
+/* ======================================= */
+
+.program-details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding-top: 10px;
+}
+
+.category-group h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--text-dark);
+  border-bottom: 1px dashed #eee;
+  padding-bottom: 5px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: auto;
+  margin-right: 10px;
+  transform: scale(1.1);
+  accent-color: var(--primary-orange);
+  /* 👈 Orange for checkboxes */
+}
+
+.checkbox-item label {
+  font-weight: normal;
+}
+
+/* ======================================= */
+/* 5. Button and Messages */
+/* ======================================= */
+
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-orange);
+  /* 👈 Orange button */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background-color: #e67e22;
+  /* Slightly darker orange on hover */
+}
+
+button[type="submit"]:disabled {
+  background-color: #ffb86b;
+  /* Lighter orange when disabled */
+  cursor: not-allowed;
+}
+
+.message {
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* ======================================= */
+/* 6. Desktop and Tablet (Responsiveness) */
+/* ======================================= */
+
+@media (min-width: 600px) {
+  .input-row {
+    display: flex;
+    gap: 20px;
+  }
+
+  .input-row .input-group {
+    flex: 1;
+  }
+
+  .program-details-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .institute-header {
+    flex-direction: row;
+    /* 👈 Revert to horizontal layout */
+    align-items: center;
+    text-align: left;
+  }
+
+  .logo-container {
+    padding-right: 20px;
+    /* Restore right padding */
+    padding-bottom: 0;
+    /* Remove bottom padding */
+    border-right: 1px solid var(--border-light);
+    /* Restore vertical separator */
+    border-bottom: none;
+    /* Remove horizontal separator */
+    width: auto;
+    /* Allow content to dictate width */
+  }
+
+  .details-container {
+    padding-left: 20px;
+    /* Restore left padding */
+    padding-top: 0;
+    /* Remove top padding */
+  }
+
+  .details-container h2 {
+    font-size: 1.6rem;
+    /* Restore original size */
+  }
+
+}
+
+@media (min-width: 900px) {
+  .form-container {
+    padding: 30px 40px;
+  }
+
+  .program-details-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .institute-header {
+    flex-direction: row;
+    /* 👈 Revert to horizontal layout */
+    align-items: center;
+    text-align: left;
+  }
+
+  .logo-container {
+    padding-right: 20px;
+    /* Restore right padding */
+    padding-bottom: 0;
+    /* Remove bottom padding */
+    border-right: 1px solid var(--border-light);
+    /* Restore vertical separator */
+    border-bottom: none;
+    /* Remove horizontal separator */
+    width: auto;
+    /* Allow content to dictate width */
+  }
+
+  .details-container {
+    padding-left: 20px;
+    /* Restore left padding */
+    padding-top: 0;
+    /* Remove top padding */
+  }
+
+  .details-container h2 {
+    font-size: 1.6rem;
+    /* Restore original size */
+  }
+}
